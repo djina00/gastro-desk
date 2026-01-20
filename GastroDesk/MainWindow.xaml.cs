@@ -1,12 +1,19 @@
 using System.Windows;
+using GastroDesk.Data;
+using GastroDesk.ViewModels;
 
-namespace GastroDesk
+namespace GastroDesk;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        // Initialize database
+        DbContextFactory.Instance.EnsureDatabaseCreated();
+
+        // Set DataContext
+        DataContext = new MainViewModel();
     }
 }
