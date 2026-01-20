@@ -17,7 +17,9 @@
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView/>
         </DataTemplate>
-        <!-- DataTemplate for MenuViewModel will be added later -->
+        <DataTemplate DataType="{x:Type vm:MenuViewModel}">
+            <views:MenuView/>
+        </DataTemplate>
         <!-- DataTemplate for OrderViewModel will be added later -->
         <!-- DataTemplate for ReportViewModel will be added later -->
 

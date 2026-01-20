@@ -10,7 +10,7 @@ namespace GastroDesk.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        // private readonly IMenuService _menuService;
+        private readonly IMenuService _menuService;
         // private readonly IOrderService _orderService;
         // private readonly IReportService _reportService;
 
@@ -46,7 +46,7 @@ namespace GastroDesk.ViewModels
         public MainViewModel()
         {
             _authService = new AuthService();
-            // _menuService = new MenuService();
+            _menuService = new MenuService();
             // _orderService = new OrderService();
             // _reportService = new ReportService();
 
@@ -68,12 +68,12 @@ namespace GastroDesk.ViewModels
         private void OnLoginSuccessful(object? sender, User user)
         {
             CurrentUser = user;
-            // NavigateToOrders(); // Will be enabled when OrderViewModel is added
+            NavigateToMenu();
         }
 
         private void NavigateToMenu()
         {
-            // CurrentViewModel = new MenuViewModel(_menuService, _reportService, IsManager);
+            CurrentViewModel = new MenuViewModel(_menuService, IsManager);
         }
 
         private void NavigateToOrders()
