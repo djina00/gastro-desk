@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
+using Microsoft.Win32;
 using GastroDesk.Commands;
 using GastroDesk.Models;
 using GastroDesk.Services.Interfaces;
@@ -9,7 +11,7 @@ namespace GastroDesk.ViewModels
     public class MenuViewModel : BaseViewModel
     {
         private readonly IMenuService _menuService;
-        // private readonly IReportService _reportService; // Will be added later for export/import
+        private readonly IReportService _reportService;
         private readonly bool _isManager;
 
         public ObservableCollection<Category> Categories { get; } = new();
@@ -86,15 +88,15 @@ namespace GastroDesk.ViewModels
         public ICommand CancelEditCommand { get; }
         public ICommand DeleteDishCommand { get; }
         public ICommand ToggleDishActiveCommand { get; }
-        // Export/Import commands will be added later with ReportService
-        // public ICommand ExportToJsonCommand { get; }
-        // public ICommand ExportToXmlCommand { get; }
-        // public ICommand ImportFromJsonCommand { get; }
-        // public ICommand ImportFromXmlCommand { get; }
+        public ICommand ExportToJsonCommand { get; }
+        public ICommand ExportToXmlCommand { get; }
+        public ICommand ImportFromJsonCommand { get; }
+        public ICommand ImportFromXmlCommand { get; }
 
-        public MenuViewModel(IMenuService menuService, bool isManager)
+        public MenuViewModel(IMenuService menuService, IReportService reportService, bool isManager)
         {
             _menuService = menuService;
+            _reportService = reportService;
             _isManager = isManager;
 
             LoadDataCommand = new AsyncRelayCommand(LoadDataAsync);
@@ -106,6 +108,10 @@ namespace GastroDesk.ViewModels
             CancelEditCommand = new RelayCommand(CancelEdit);
             DeleteDishCommand = new AsyncRelayCommand(DeleteDishAsync, () => _isManager && SelectedDish != null);
             ToggleDishActiveCommand = new AsyncRelayCommand(ToggleDishActiveAsync, () => _isManager && SelectedDish != null);
+            ExportToJsonCommand = new AsyncRelayCommand(ExportToJsonAsync, () => _isManager);
+            ExportToXmlCommand = new AsyncRelayCommand(ExportToXmlAsync, () => _isManager);
+            ImportFromJsonCommand = new AsyncRelayCommand(ImportFromJsonAsync, () => _isManager);
+            ImportFromXmlCommand = new AsyncRelayCommand(ImportFromXmlAsync, () => _isManager);
 
             _ = LoadDataAsync();
         }
@@ -280,6 +286,98 @@ namespace GastroDesk.ViewModels
             catch (Exception ex)
             {
                 SetError($"Error toggling dish status: {ex.Message}");
+            }
+        }
+
+        private async Task ExportToJsonAsync()
+        {
+            try
+            {
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json",
+                    FileName = $"menu_export_{DateTime.Now:yyyyMMdd}.json"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var json = await _reportService.ExportMenuToJsonAsync();
+                    await File.WriteAllTextAsync(dialog.FileName, json);
+                    SetError("Menu exported successfully to JSON!");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetError($"Error exporting to JSON: {ex.Message}");
+            }
+        }
+
+        private async Task ExportToXmlAsync()
+        {
+            try
+            {
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "XML files (*.xml)|*.xml",
+                    FileName = $"menu_export_{DateTime.Now:yyyyMMdd}.xml"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var xml = await _reportService.ExportMenuToXmlAsync();
+                    await File.WriteAllTextAsync(dialog.FileName, xml);
+                    SetError("Menu exported successfully to XML!");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetError($"Error exporting to XML: {ex.Message}");
+            }
+        }
+
+        private async Task ImportFromJsonAsync()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var json = await File.ReadAllTextAsync(dialog.FileName);
+                    await _reportService.ImportMenuFromJsonAsync(json);
+                    await LoadDataAsync();
+                    SetError("Menu imported successfully from JSON!");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetError($"Error importing from JSON: {ex.Message}");
+            }
+        }
+
+        private async Task ImportFromXmlAsync()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "XML files (*.xml)|*.xml"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var xml = await File.ReadAllTextAsync(dialog.FileName);
+                    await _reportService.ImportMenuFromXmlAsync(xml);
+                    await LoadDataAsync();
+                    SetError("Menu imported successfully from XML!");
+                }
+            }
+            catch (Exception ex)
+            {
+                SetError($"Error importing from XML: {ex.Message}");
             }
         }
     }

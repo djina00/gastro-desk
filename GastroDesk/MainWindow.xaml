@@ -23,7 +23,9 @@
         <DataTemplate DataType="{x:Type vm:OrderViewModel}">
             <views:OrderView/>
         </DataTemplate>
-        <!-- DataTemplate for ReportViewModel will be added later -->
+        <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+            <views:ReportView/>
+        </DataTemplate>
 
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>

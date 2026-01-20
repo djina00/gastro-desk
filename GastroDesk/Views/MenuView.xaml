@@ -60,6 +60,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -72,9 +73,15 @@
                             Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
 
-                <!-- Export/Import Buttons will be added later with ReportService -->
+                <!-- Export/Import Buttons -->
+                <WrapPanel Grid.Row="1" Margin="15,0,15,10" Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button Content="Export JSON" Command="{Binding ExportToJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
+                    <Button Content="Export XML" Command="{Binding ExportToXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
+                    <Button Content="Import JSON" Command="{Binding ImportFromJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
+                    <Button Content="Import XML" Command="{Binding ImportFromXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
+                </WrapPanel>
 
-                <DataGrid Grid.Row="1"
+                <DataGrid Grid.Row="2"
                           ItemsSource="{Binding Dishes}"
                           SelectedItem="{Binding SelectedDish}"
                           AutoGenerateColumns="False"
@@ -92,7 +99,7 @@
                 </DataGrid>
 
                 <!-- Edit/Delete Buttons -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="15"
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="15"
                             Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button Content="Edit" Command="{Binding EditDishCommand}" Padding="15,8" Margin="0,0,10,0" Background="#2196F3" Foreground="White" BorderThickness="0"/>
                     <Button Content="Toggle Active" Command="{Binding ToggleDishActiveCommand}" Padding="15,8" Margin="0,0,10,0" Background="#FF9800" Foreground="White" BorderThickness="0"/>

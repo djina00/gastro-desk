@@ -12,7 +12,7 @@ namespace GastroDesk.ViewModels
         private readonly IAuthService _authService;
         private readonly IMenuService _menuService;
         private readonly IOrderService _orderService;
-        // private readonly IReportService _reportService;
+        private readonly IReportService _reportService;
 
         private BaseViewModel? _currentViewModel;
         public BaseViewModel? CurrentViewModel
@@ -48,7 +48,7 @@ namespace GastroDesk.ViewModels
             _authService = new AuthService();
             _menuService = new MenuService();
             _orderService = new OrderService();
-            // _reportService = new ReportService();
+            _reportService = new ReportService();
 
             NavigateToMenuCommand = new RelayCommand(() => NavigateToMenu(), () => IsLoggedIn);
             NavigateToOrdersCommand = new RelayCommand(() => NavigateToOrders(), () => IsLoggedIn);
@@ -73,7 +73,7 @@ namespace GastroDesk.ViewModels
 
         private void NavigateToMenu()
         {
-            CurrentViewModel = new MenuViewModel(_menuService, IsManager);
+            CurrentViewModel = new MenuViewModel(_menuService, _reportService, IsManager);
         }
 
         private void NavigateToOrders()
@@ -83,7 +83,7 @@ namespace GastroDesk.ViewModels
 
         private void NavigateToReports()
         {
-            // CurrentViewModel = new ReportViewModel(_reportService);
+            CurrentViewModel = new ReportViewModel(_reportService);
         }
 
         private void ExecuteLogout()
