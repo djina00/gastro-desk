@@ -20,7 +20,9 @@
         <DataTemplate DataType="{x:Type vm:MenuViewModel}">
             <views:MenuView/>
         </DataTemplate>
-        <!-- DataTemplate for OrderViewModel will be added later -->
+        <DataTemplate DataType="{x:Type vm:OrderViewModel}">
+            <views:OrderView/>
+        </DataTemplate>
         <!-- DataTemplate for ReportViewModel will be added later -->
 
         <Style x:Key="NavButtonStyle" TargetType="Button">
