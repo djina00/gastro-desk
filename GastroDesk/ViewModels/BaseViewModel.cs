@@ -1,4 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace GastroDesk.ViewModels
 {
@@ -6,8 +7,25 @@ namespace GastroDesk.ViewModels
     /// Base class for all ViewModels implementing INotifyPropertyChanged.
     /// Uses the Observer pattern through property change notifications.
     /// </summary>
-    public abstract class BaseViewModel : ObservableObject
+    public abstract class BaseViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
         private bool _isLoading;
         public bool IsLoading
         {
