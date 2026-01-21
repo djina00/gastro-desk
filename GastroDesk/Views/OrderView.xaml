@@ -57,7 +57,7 @@
                                             <Run Text="{Binding OrderDateTime, StringFormat='{}{0:MMM dd, HH:mm}'}"/>
                                         </TextBlock>
                                     </StackPanel>
-                                    <Border Grid.Column="1" Padding="8,4" CornerRadius="3">
+                                    <Border Grid.Column="1" Padding="12,5" CornerRadius="10" Margin="10,0,0,0" VerticalAlignment="Center">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Setter Property="Background" Value="#FFC107"/>
@@ -71,7 +71,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock Text="{Binding Status}" Foreground="White" FontSize="11"/>
+                                        <TextBlock Text="{Binding Status}" Foreground="White" FontSize="10" FontWeight="SemiBold" TextAlignment="Center"/>
                                     </Border>
                                 </Grid>
                             </Border>

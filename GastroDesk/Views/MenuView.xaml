@@ -39,15 +39,28 @@
 
                 <!-- Add Category (Manager only) -->
                 <StackPanel Grid.Row="2" Margin="10" Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="Add New Category" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <TextBlock Text="Category Name" Foreground="#666" Margin="0,0,0,3"/>
                     <TextBox Text="{Binding NewCategoryName, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="8" Margin="0,0,0,5"
-                             Tag="Category Name"/>
+                             Padding="8" Margin="0,0,0,10"/>
+                    <TextBlock Text="Description" Foreground="#666" Margin="0,0,0,3"/>
                     <TextBox Text="{Binding NewCategoryDescription, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="8" Margin="0,0,0,5"
-                             Tag="Description"/>
+                             Padding="8" Margin="0,0,0,10"/>
                     <Button Content="Add Category"
                             Command="{Binding AddCategoryCommand}"
-                            Padding="10,8" Background="#4CAF50" Foreground="White" BorderThickness="0"/>
+                            Padding="10,8" Background="#4CAF50" Foreground="White" BorderThickness="0"
+                            Margin="0,0,0,5"/>
+                    <Button Content="Delete Selected Category"
+                            Command="{Binding DeleteCategoryCommand}"
+                            Padding="10,8" Background="#f44336" Foreground="White" BorderThickness="0" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

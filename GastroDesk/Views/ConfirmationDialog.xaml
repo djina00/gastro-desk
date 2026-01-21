@@ -1,0 +1,74 @@
+<Window x:Class="GastroDesk.Views.ConfirmationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Confirm Action"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SizeToContent="WidthAndHeight"
+        MinWidth="350">
+
+    <Border Background="White" Padding="25">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.15"/>
+        </Border.Effect>
+
+        <StackPanel>
+            <TextBlock x:Name="TitleText"
+                       Text="Confirm Delete"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="#333"
+                       Margin="0,0,0,15"/>
+
+            <TextBlock x:Name="MessageText"
+                       Text="Are you sure you want to delete this item?"
+                       FontSize="14"
+                       Foreground="#666"
+                       TextWrapping="Wrap"
+                       MaxWidth="300"
+                       Margin="0,0,0,25"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CancelButton"
+                        Content="Cancel"
+                        Click="CancelButton_Click"
+                        Padding="20,10"
+                        Margin="0,0,10,0"
+                        Background="#9E9E9E"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="ConfirmButton"
+                        Content="Delete"
+                        Click="ConfirmButton_Click"
+                        Padding="20,10"
+                        Background="#f44336"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

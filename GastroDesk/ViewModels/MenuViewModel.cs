@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using GastroDesk.Commands;
 using GastroDesk.Models;
 using GastroDesk.Services.Interfaces;
+using GastroDesk.Views;
 
 namespace GastroDesk.ViewModels
 {
@@ -187,6 +188,12 @@ namespace GastroDesk.ViewModels
         {
             if (SelectedCategory == null) return;
 
+            var confirmed = ConfirmationDialog.Show(
+                "Delete Category",
+                $"Are you sure you want to delete the category \"{SelectedCategory.Name}\"? All dishes in this category will also be deleted.");
+
+            if (!confirmed) return;
+
             try
             {
                 await _menuService.DeleteCategoryAsync(SelectedCategory.Id);
@@ -262,6 +269,12 @@ namespace GastroDesk.ViewModels
         private async Task DeleteDishAsync()
         {
             if (SelectedDish == null) return;
+
+            var confirmed = ConfirmationDialog.Show(
+                "Delete Dish",
+                $"Are you sure you want to delete the dish \"{SelectedDish.Name}\"?");
+
+            if (!confirmed) return;
 
             try
             {
