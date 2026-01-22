@@ -63,13 +63,26 @@ namespace GastroDesk.Services
             using var context = _dbContextFactory.CreateContext();
             var category = await context.Categories
                 .Include(c => c.Dishes)
+                    .ThenInclude(d => d.OrderItems)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
                 return false;
 
+            // Delete all order items for dishes in this category first
+            foreach (var dish in category.Dishes)
+            {
+                if (dish.OrderItems.Any())
+                {
+                    context.OrderItems.RemoveRange(dish.OrderItems);
+                }
+            }
+
+            // Delete all dishes in this category
             if (category.Dishes.Any())
-                throw new InvalidOperationException("Cannot delete category with dishes");
+            {
+                context.Dishes.RemoveRange(category.Dishes);
+            }
 
             context.Categories.Remove(category);
             await context.SaveChangesAsync();
