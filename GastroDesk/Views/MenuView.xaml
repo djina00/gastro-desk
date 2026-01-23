@@ -86,13 +86,16 @@
                             Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
 
-                <!-- Export/Import Buttons -->
-                <WrapPanel Grid.Row="1" Margin="15,0,15,10" Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Button Content="Export JSON" Command="{Binding ExportToJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
-                    <Button Content="Export XML" Command="{Binding ExportToXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
-                    <Button Content="Import JSON" Command="{Binding ImportFromJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
-                    <Button Content="Import XML" Command="{Binding ImportFromXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
-                </WrapPanel>
+                <!-- Export/Import Buttons for Selected Category's Dishes -->
+                <StackPanel Grid.Row="1" Margin="15,0,15,10" Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="Export/Import dishes from selected category:" Foreground="#666" FontSize="11" Margin="0,0,0,5"/>
+                    <WrapPanel>
+                        <Button Content="Export JSON" Command="{Binding ExportToJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Export XML" Command="{Binding ExportToXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#FF9800" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Import JSON" Command="{Binding ImportFromJsonCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
+                        <Button Content="Import XML" Command="{Binding ImportFromXmlCommand}" Padding="10,5" Margin="0,0,5,5" Background="#9C27B0" Foreground="White" BorderThickness="0"/>
+                    </WrapPanel>
+                </StackPanel>
 
                 <DataGrid Grid.Row="2"
                           ItemsSource="{Binding Dishes}"

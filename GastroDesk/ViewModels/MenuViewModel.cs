@@ -109,10 +109,10 @@ namespace GastroDesk.ViewModels
             CancelEditCommand = new RelayCommand(CancelEdit);
             DeleteDishCommand = new AsyncRelayCommand(DeleteDishAsync, () => _isManager && SelectedDish != null);
             ToggleDishActiveCommand = new AsyncRelayCommand(ToggleDishActiveAsync, () => _isManager && SelectedDish != null);
-            ExportToJsonCommand = new AsyncRelayCommand(ExportToJsonAsync, () => _isManager);
-            ExportToXmlCommand = new AsyncRelayCommand(ExportToXmlAsync, () => _isManager);
-            ImportFromJsonCommand = new AsyncRelayCommand(ImportFromJsonAsync, () => _isManager);
-            ImportFromXmlCommand = new AsyncRelayCommand(ImportFromXmlAsync, () => _isManager);
+            ExportToJsonCommand = new AsyncRelayCommand(ExportToJsonAsync, () => _isManager && SelectedCategory != null);
+            ExportToXmlCommand = new AsyncRelayCommand(ExportToXmlAsync, () => _isManager && SelectedCategory != null);
+            ImportFromJsonCommand = new AsyncRelayCommand(ImportFromJsonAsync, () => _isManager && SelectedCategory != null);
+            ImportFromXmlCommand = new AsyncRelayCommand(ImportFromXmlAsync, () => _isManager && SelectedCategory != null);
 
             _ = LoadDataAsync();
         }
@@ -304,19 +304,21 @@ namespace GastroDesk.ViewModels
 
         private async Task ExportToJsonAsync()
         {
+            if (SelectedCategory == null) return;
+
             try
             {
                 var dialog = new SaveFileDialog
                 {
                     Filter = "JSON files (*.json)|*.json",
-                    FileName = $"menu_export_{DateTime.Now:yyyyMMdd}.json"
+                    FileName = $"dishes_{SelectedCategory.Name}_{DateTime.Now:yyyyMMdd}.json"
                 };
 
                 if (dialog.ShowDialog() == true)
                 {
-                    var json = await _reportService.ExportMenuToJsonAsync();
+                    var json = await _reportService.ExportDishesToJsonAsync(SelectedCategory.Id);
                     await File.WriteAllTextAsync(dialog.FileName, json);
-                    SetError("Menu exported successfully to JSON!");
+                    SetError($"Dishes from '{SelectedCategory.Name}' exported successfully to JSON!");
                 }
             }
             catch (Exception ex)
@@ -327,19 +329,21 @@ namespace GastroDesk.ViewModels
 
         private async Task ExportToXmlAsync()
         {
+            if (SelectedCategory == null) return;
+
             try
             {
                 var dialog = new SaveFileDialog
                 {
                     Filter = "XML files (*.xml)|*.xml",
-                    FileName = $"menu_export_{DateTime.Now:yyyyMMdd}.xml"
+                    FileName = $"dishes_{SelectedCategory.Name}_{DateTime.Now:yyyyMMdd}.xml"
                 };
 
                 if (dialog.ShowDialog() == true)
                 {
-                    var xml = await _reportService.ExportMenuToXmlAsync();
+                    var xml = await _reportService.ExportDishesToXmlAsync(SelectedCategory.Id);
                     await File.WriteAllTextAsync(dialog.FileName, xml);
-                    SetError("Menu exported successfully to XML!");
+                    SetError($"Dishes from '{SelectedCategory.Name}' exported successfully to XML!");
                 }
             }
             catch (Exception ex)
@@ -350,6 +354,8 @@ namespace GastroDesk.ViewModels
 
         private async Task ImportFromJsonAsync()
         {
+            if (SelectedCategory == null) return;
+
             try
             {
                 var dialog = new OpenFileDialog
@@ -360,9 +366,9 @@ namespace GastroDesk.ViewModels
                 if (dialog.ShowDialog() == true)
                 {
                     var json = await File.ReadAllTextAsync(dialog.FileName);
-                    await _reportService.ImportMenuFromJsonAsync(json);
-                    await LoadDataAsync();
-                    SetError("Menu imported successfully from JSON!");
+                    await _reportService.ImportDishesFromJsonAsync(json, SelectedCategory.Id);
+                    await LoadDishesAsync();
+                    SetError($"Dishes imported successfully to '{SelectedCategory.Name}' from JSON!");
                 }
             }
             catch (Exception ex)
@@ -373,6 +379,8 @@ namespace GastroDesk.ViewModels
 
         private async Task ImportFromXmlAsync()
         {
+            if (SelectedCategory == null) return;
+
             try
             {
                 var dialog = new OpenFileDialog
@@ -383,9 +391,9 @@ namespace GastroDesk.ViewModels
                 if (dialog.ShowDialog() == true)
                 {
                     var xml = await File.ReadAllTextAsync(dialog.FileName);
-                    await _reportService.ImportMenuFromXmlAsync(xml);
-                    await LoadDataAsync();
-                    SetError("Menu imported successfully from XML!");
+                    await _reportService.ImportDishesFromXmlAsync(xml, SelectedCategory.Id);
+                    await LoadDishesAsync();
+                    SetError($"Dishes imported successfully to '{SelectedCategory.Name}' from XML!");
                 }
             }
             catch (Exception ex)
