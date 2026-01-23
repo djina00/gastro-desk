@@ -408,11 +408,143 @@ namespace GastroDesk.Services
 
             await context.SaveChangesAsync();
         }
+
+        public async Task<string> ExportDishesToJsonAsync(int categoryId)
+        {
+            using var context = _dbContextFactory.CreateContext();
+
+            var category = await context.Categories
+                .Include(c => c.Dishes)
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+                throw new InvalidOperationException("Category not found");
+
+            var export = new DishesExport
+            {
+                ExportDate = DateTime.Now,
+                CategoryName = category.Name,
+                Dishes = category.Dishes.Select(d => new DishExportItem
+                {
+                    Name = d.Name,
+                    Description = d.Description,
+                    Price = d.Price,
+                    IsActive = d.IsActive
+                }).ToList()
+            };
+
+            return JsonSerializer.Serialize(export, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+        }
+
+        public async Task<string> ExportDishesToXmlAsync(int categoryId)
+        {
+            using var context = _dbContextFactory.CreateContext();
+
+            var category = await context.Categories
+                .Include(c => c.Dishes)
+                .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+            if (category == null)
+                throw new InvalidOperationException("Category not found");
+
+            var export = new DishesExport
+            {
+                ExportDate = DateTime.Now,
+                CategoryName = category.Name,
+                Dishes = category.Dishes.Select(d => new DishExportItem
+                {
+                    Name = d.Name,
+                    Description = d.Description,
+                    Price = d.Price,
+                    IsActive = d.IsActive
+                }).ToList()
+            };
+
+            var serializer = new XmlSerializer(typeof(DishesExport));
+            using var stringWriter = new StringWriter();
+            serializer.Serialize(stringWriter, export);
+            return stringWriter.ToString();
+        }
+
+        public async Task ImportDishesFromJsonAsync(string json, int categoryId)
+        {
+            var export = JsonSerializer.Deserialize<DishesExport>(json);
+            if (export?.Dishes != null)
+            {
+                await ImportDishesAsync(export.Dishes, categoryId);
+            }
+        }
+
+        public async Task ImportDishesFromXmlAsync(string xml, int categoryId)
+        {
+            var serializer = new XmlSerializer(typeof(DishesExport));
+            using var stringReader = new StringReader(xml);
+            var export = (DishesExport?)serializer.Deserialize(stringReader);
+            if (export?.Dishes != null)
+            {
+                await ImportDishesAsync(export.Dishes, categoryId);
+            }
+        }
+
+        private async Task ImportDishesAsync(List<DishExportItem> dishes, int categoryId)
+        {
+            using var context = _dbContextFactory.CreateContext();
+
+            var category = await context.Categories.FindAsync(categoryId);
+            if (category == null)
+                throw new InvalidOperationException("Category not found");
+
+            foreach (var dish in dishes)
+            {
+                var existingDish = await context.Dishes
+                    .FirstOrDefaultAsync(d => d.Name == dish.Name && d.CategoryId == categoryId);
+
+                if (existingDish == null)
+                {
+                    context.Dishes.Add(new Dish
+                    {
+                        Name = dish.Name,
+                        Description = dish.Description,
+                        Price = dish.Price,
+                        CategoryId = categoryId,
+                        IsActive = dish.IsActive,
+                        CreatedAt = DateTime.Now
+                    });
+                }
+                else
+                {
+                    existingDish.Description = dish.Description;
+                    existingDish.Price = dish.Price;
+                    existingDish.IsActive = dish.IsActive;
+                    existingDish.UpdatedAt = DateTime.Now;
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 
     public class MenuExport
     {
         public DateTime ExportDate { get; set; }
         public List<Category> Categories { get; set; } = new();
+    }
+
+    public class DishesExport
+    {
+        public DateTime ExportDate { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+        public List<DishExportItem> Dishes { get; set; } = new();
+    }
+
+    public class DishExportItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
+        public bool IsActive { get; set; }
     }
 }

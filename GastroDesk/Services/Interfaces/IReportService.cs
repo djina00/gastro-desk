@@ -12,6 +12,10 @@ namespace GastroDesk.Services.Interfaces
         Task<string> ExportMenuToXmlAsync();
         Task ImportMenuFromJsonAsync(string json);
         Task ImportMenuFromXmlAsync(string xml);
+        Task<string> ExportDishesToJsonAsync(int categoryId);
+        Task<string> ExportDishesToXmlAsync(int categoryId);
+        Task ImportDishesFromJsonAsync(string json, int categoryId);
+        Task ImportDishesFromXmlAsync(string xml, int categoryId);
     }
 
     public class DailyRevenueReport
