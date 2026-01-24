@@ -57,4 +57,39 @@ namespace GastroDesk.Converters
             return value is bool b && !b;
         }
     }
+
+    public class BoolToActiveTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool isActive)
+            {
+                return isActive ? "Deactivate" : "Activate";
+            }
+            return "Toggle Active";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class BoolToActiveColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool isActive)
+            {
+                // Green for Activate (when inactive), Orange for Deactivate (when active)
+                return isActive ? "#FF9800" : "#4CAF50";
+            }
+            return "#FF9800"; // Default orange
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

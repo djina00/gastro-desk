@@ -8,5 +8,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <converters:BoolToActiveTextConverter x:Key="BoolToActiveTextConverter"/>
+        <converters:BoolToActiveColorConverter x:Key="BoolToActiveColorConverter"/>
     </Application.Resources>
 </Application>

@@ -109,10 +109,10 @@
                 </DataGrid>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="15">
-                    <Button Content="Toggle Active/Inactive"
+                    <Button Content="{Binding SelectedUser.IsActive, Converter={StaticResource BoolToActiveTextConverter}}"
                             Command="{Binding ToggleUserActiveCommand}"
                             Padding="15,8"
-                            Background="#FF9800"
+                            Background="{Binding SelectedUser.IsActive, Converter={StaticResource BoolToActiveColorConverter}}"
                             Foreground="White"
                             BorderThickness="0"
                             Cursor="Hand"/>
