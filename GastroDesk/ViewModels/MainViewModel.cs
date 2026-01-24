@@ -30,17 +30,20 @@ namespace GastroDesk.ViewModels
                 SetProperty(ref _currentUser, value);
                 OnPropertyChanged(nameof(IsLoggedIn));
                 OnPropertyChanged(nameof(IsManager));
+                OnPropertyChanged(nameof(IsAdmin));
                 OnPropertyChanged(nameof(UserDisplayName));
             }
         }
 
         public bool IsLoggedIn => CurrentUser != null;
-        public bool IsManager => CurrentUser?.Role == UserRole.Manager;
+        public bool IsManager => CurrentUser?.Role == UserRole.Manager || CurrentUser?.Role == UserRole.Admin;
+        public bool IsAdmin => CurrentUser?.Role == UserRole.Admin;
         public string UserDisplayName => CurrentUser?.FullName ?? "";
 
         public ICommand NavigateToMenuCommand { get; }
         public ICommand NavigateToOrdersCommand { get; }
         public ICommand NavigateToReportsCommand { get; }
+        public ICommand NavigateToUsersCommand { get; }
         public ICommand LogoutCommand { get; }
 
         public MainViewModel()
@@ -53,6 +56,7 @@ namespace GastroDesk.ViewModels
             NavigateToMenuCommand = new RelayCommand(() => NavigateToMenu(), () => IsLoggedIn);
             NavigateToOrdersCommand = new RelayCommand(() => NavigateToOrders(), () => IsLoggedIn);
             NavigateToReportsCommand = new RelayCommand(() => NavigateToReports(), () => IsLoggedIn && IsManager);
+            NavigateToUsersCommand = new RelayCommand(() => NavigateToUsers(), () => IsLoggedIn && IsAdmin);
             LogoutCommand = new RelayCommand(ExecuteLogout);
 
             ShowLogin();
@@ -84,6 +88,11 @@ namespace GastroDesk.ViewModels
         private void NavigateToReports()
         {
             CurrentViewModel = new ReportViewModel(_reportService);
+        }
+
+        private void NavigateToUsers()
+        {
+            CurrentViewModel = new UserManagementViewModel(_authService);
         }
 
         private void ExecuteLogout()

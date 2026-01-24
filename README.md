@@ -4,7 +4,7 @@ A WPF desktop application for restaurant management built with MVVM architecture
 
 ## Features
 
-- **User Authentication**: Login system with role-based access (Manager/Waiter)
+- **User Authentication**: Login system with role-based access (Admin/Manager/Waiter)
 - **Menu Management**: CRUD operations for dishes and categories
 - **Order Management**: Create, modify, and track customer orders
 - **Daily Revenue View**: View sales statistics and order history
@@ -46,12 +46,10 @@ GastroDesk/
 1. **Singleton Pattern** (Creational): `DbContextFactory` - Single instance for database context creation
 2. **Command Pattern** (Behavioral): `RelayCommand`, `AsyncRelayCommand` - MVVM command binding
 
-## Getting Started
-
-### Prerequisites
+### Used environment
 
 - .NET 8 SDK
-- Visual Studio 2022 or VS Code
+- Visual Studio 2022
 
 ### Running the Application
 

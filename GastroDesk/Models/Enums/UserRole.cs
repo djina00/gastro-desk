@@ -2,7 +2,8 @@ namespace GastroDesk.Models.Enums
 {
     public enum UserRole
     {
-        Waiter = 0,
-        Manager = 1
+        Admin = 0,
+        Manager = 1,
+        Waiter = 2
     }
 }

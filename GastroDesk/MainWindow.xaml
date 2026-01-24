@@ -26,6 +26,9 @@
         <DataTemplate DataType="{x:Type vm:ReportViewModel}">
             <views:ReportView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserManagementViewModel}">
+            <views:UserManagementView/>
+        </DataTemplate>
 
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -91,7 +94,12 @@
                     <Button Content="Reports"
                             Command="{Binding NavigateToReportsCommand}"
                             Style="{StaticResource NavButtonStyle}"
-                            Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Margin="0,0,10,0"/>
+                    <Button Content="Users"
+                            Command="{Binding NavigateToUsersCommand}"
+                            Style="{StaticResource NavButtonStyle}"
+                            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
 
                 <!-- User Info -->
