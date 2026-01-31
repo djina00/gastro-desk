@@ -10,6 +10,7 @@ A WPF desktop application for restaurant management built with MVVM architecture
 - **Daily Revenue View**: View sales statistics and order history
 - **Reports**: Generate daily/weekly PDF reports
 - **Data Export/Import**: Export menu to JSON/XML, import from files
+- **CI/CD**: Automated build and testing with GitHub Actions
 
 ## Technologies
 
@@ -20,26 +21,15 @@ A WPF desktop application for restaurant management built with MVVM architecture
 | ORM | Entity Framework Core 8 |
 | Database | SQLite |
 | PDF Generation | QuestPDF |
+| Serialization | JSON (System.Text.Json), XML (XmlSerializer) |
 | Testing | xUnit |
+| CI/CD | GitHub Actions |
+| Deploy | ZIP |
 
 
 ## Database
 
 SQLite database 
-
-## Project Structure
-
-```
-GastroDesk/
-├── Models/           # Entity classes and enums
-├── ViewModels/       # MVVM ViewModels
-├── Views/            # XAML views
-├── Services/         # Business logic services
-├── Data/             # EF Core DbContext
-├── Commands/         # ICommand implementations
-├── Converters/       # XAML value converters
-└── Helpers/          # Utility classes
-```
 
 ## Design Patterns
 
